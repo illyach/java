@@ -21,4 +21,8 @@ public class Library {
         }
         return availableItems;
     }
+    public void remove(String uniqueID) {
+        items.removeIf(item -> item.getUniqueID().equals(uniqueID));
+    }
+
 }
