@@ -1,28 +1,57 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Library {
-    private List<Item> items;
+public class Library implements IManageable {
 
-    public Library() {
-        items = new ArrayList<>();
-    }
+    List<Item> items = new ArrayList<>();
+    List<Patron> patrons = new ArrayList<>();
 
+    @Override
     public void add(Item item) {
-        items.add(item);
+        this.items.add(item);
     }
 
-    public List<Item> listAvailable() {
-        List<Item> availableItems = new ArrayList<>();
-        for (Item item : items) {
-            if (!item.isBorrowed()) {
-                availableItems.add(item);
+    @Override
+    public void remove(Item item) {
+        this.items.remove(item);
+    }
+
+    @Override
+    public void listAvailable() {
+        for (Item item : this.items) {
+            if (!item.isBorrowed) {
+                System.out.println(item.title);
             }
         }
-        return availableItems;
     }
-    public void remove(String uniqueID) {
-        items.removeIf(item -> item.getUniqueID().equals(uniqueID));
+
+    @Override
+    public void listBorrowed() {
+        for (Patron patron : this.patrons) {
+            for (Item item : patron.borrowedItems) {
+                System.out.println(item.title + ", Читатель: " + patron.name);
+            }
+        }
+    }
+
+    public void registerPatron(Patron patron) {
+        this.patrons.add(patron);
+    }
+
+    public void listPatrons() {
+        for (Patron patron : this.patrons) {
+            System.out.println(patron.name + patron.ID);
+        }
+    }
+
+    public void lendItem(Patron patron, Item item) {
+        patron.borrowedItems.add(item);
+        item.isBorrowed = true;
+    }
+
+    public void returnItem(Patron patron, Item item) {
+        patron.borrowedItems.remove(item);
+        item.isBorrowed = false;
     }
 
 }
